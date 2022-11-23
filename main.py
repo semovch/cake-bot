@@ -17,7 +17,11 @@ def start_message(message):
 
     markup.add(catalog, contacts, basket)
 
-    bot.send_message(message.chat.id, "Привет! Самые вкусные торты тут! 🍰", reply_markup= markup)
+    bot.send_message(
+        message.chat.id,
+        "Привет! Самые вкусные торты тут! 🍰",
+        reply_markup=markup
+        )
 
 
 bot.polling(none_stop=True)
