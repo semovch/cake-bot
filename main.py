@@ -37,65 +37,68 @@ def start_message(message):
 @bot.message_handler(commands=['button'])
 def button_message(message):
 
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-
     catalog = types.KeyboardButton('Каталог')
     contacts = types.KeyboardButton('Контакты')
     basket = types.KeyboardButton('Корзина')
     make_cake = types.KeyboardButton('Создать торт')
 
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     markup.add(catalog, contacts, basket, make_cake)
     bot.send_message(message.chat.id, '', reply_markup=markup)
 
 
 @bot.message_handler(content_types='text')
 def message_reply(message):
-    if message.text == 'Создать торт' or 'Вернуться к созданию торта':
 
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
+    if message.text == 'Вернуться в основное меню':
+
+        catalog = types.KeyboardButton('Каталог')
+        contacts = types.KeyboardButton('Контакты')
+        basket = types.KeyboardButton('Корзина')
+        make_cake = types.KeyboardButton('Создать торт')
+
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+        markup.add(catalog, contacts, basket, make_cake)
+        bot.send_message(message.chat.id, 'Вы перешли в основное меню:', reply_markup=markup)
+
+    if message.text == 'Создать торт' or message.text == 'Вернуться к созданию торта':
+
         meringue = types.KeyboardButton('Торт-бeзе')
         cake = types.KeyboardButton('Бисквитный торт')
         waffles = types.KeyboardButton('Вафельной торт')
         cream = types.KeyboardButton('Творожный торт')
         back = types.KeyboardButton('Вернуться в основное меню')
 
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
         markup.add(meringue, cake, waffles, cream, back)
-        bot.send_message(message.chat.id, 'На какой основе хотите торт?', reply_markup=markup)
+        bot.send_message(message.chat.id, 'Выбираем основу торта', reply_markup=markup)
 
-    if message.text == 'Вернуться в основное меню':
-
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-        catalog = types.KeyboardButton('Каталог')
-        contacts = types.KeyboardButton('Контакты')
-        basket = types.KeyboardButton('Корзина')
-        make_cake = types.KeyboardButton('Создать торт')
-
-        markup.add(catalog, contacts, basket, make_cake)
-        bot.send_message(message.chat.id, 'Вы перешли в основное меню:', reply_markup=markup)
+    if message.text == 'Шоколадный крем':
+        bot.send_message(message.chat.id, 'Отличный выбор!')
 
     if message.text == 'Бисквитный торт':
 
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
         choco_cream = types.KeyboardButton('Шоколадный крем')
         banana_cream = types.KeyboardButton('Банановый крем')
         berry_cream = types.KeyboardButton('Ягодный крем')
         pistachio_cream = types.KeyboardButton('Фисташковый крем')
         back = types.KeyboardButton('Вернуться к созданию торта')
 
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
         markup.add(choco_cream, banana_cream, berry_cream, pistachio_cream, back)
-        bot.send_message(message.chat.id, 'Отличный выбор! Определимся с кремом:', reply_markup=markup)
+        bot.send_message(message.chat.id, 'Определимся с кремом:', reply_markup=markup)
 
     if message.text == 'Торт-бeзе':
 
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
         choco_cream = types.KeyboardButton('Шоколадный крем')
         banana_cream = types.KeyboardButton('Банановый крем')
         berry_cream = types.KeyboardButton('Ягодный крем')
         pistachio_cream = types.KeyboardButton('Фисташковый крем')
         back = types.KeyboardButton('Вернуться к созданию торта')
 
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
         markup.add(choco_cream, banana_cream, berry_cream, pistachio_cream, back)
-        bot.send_message(message.chat.id, 'Отличный выбор! Определимся с кремом:', reply_markup=markup)
+        bot.send_message(message.chat.id, 'Определимся с кремом:', reply_markup=markup)
 
 
 bot.polling(none_stop=True)
