@@ -1,7 +1,8 @@
 import sqlite3
+from pathlib import Path
 
 
-BASE = 'data/bot_database.db'
+BASE = Path.cwd().joinpath('data').joinpath('bot_database.db')
 
 
 def SQL_register_new_user(name, login, tg_id):
@@ -36,12 +37,3 @@ def SQL_get_user_data(tg_id):
         'contact': result[3]
         }
     return formated_result
-
-
-'''
-user = SQL_get_user_data(898397711)
-if user:
-    print(f"Welcome back {user['login']}")
-else:
-    print(f"Привет, user_login! Самые вкусные торты тут! 🍰")
-'''
