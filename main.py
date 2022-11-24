@@ -27,13 +27,13 @@ def start_message(message):
     user_tg_id = message.from_user.id
 
     user = SQL_get_user_data(user_tg_id)
-    if user:    # Если новый пользователь
+    if user:    # Если не новый пользователь
         bot.send_message(
             message.chat.id,
             f"Welcome back {user['login']}!",
             reply_markup=markup
             )
-    else:       # Если пользователь не новый
+    else:       # Если пользователь новый
         bot.send_message(
             message.chat.id,
             f"Привет, {user_login}! Самые вкусные торты тут! 🍰",
