@@ -9,19 +9,20 @@ from sql_functions import (
 
 TOKEN = '5811022670:AAGnEXWfmIgbYxJQ0DHH8mJXTJjtqjhhddI'
 
+
 bot = telebot.TeleBot(TOKEN)
 
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 2)
-
     catalog = types.KeyboardButton('Каталог')
     contacts = types.KeyboardButton('Контакты')
     basket = types.KeyboardButton('Корзина')
     make_cake = types.KeyboardButton('Создать торт')
+    button_phone = types.KeyboardButton(text="Отправить свой номер телефона для связи с менеджером", request_contact=True)
+    markup.add(catalog, contacts, basket, make_cake, button_phone)
 
-    markup.add(catalog, contacts, basket, make_cake)
     
     user_name = message.from_user.full_name
     user_login = message.from_user.username
@@ -37,16 +38,19 @@ def start_message(message):
     else:       # Если пользователь новый
         bot.send_message(
             message.chat.id,
-            f"Привет, {user_login}! Самые вкусные торты тут! 🍰",
+            f"Привет, {user_login}! Самые вкусные торты тут! 🍰, "
+            f"Ты можешь создать заказ сам, или отправить свой номер "
+            f"телефона для обратной связи с менеджером",
             reply_markup=markup
             )
         SQL_register_new_user(user_name, user_login, user_tg_id)
-    
+
+
 @bot.message_handler(content_types=['text'])
 def subcategory(message):
     if message.chat.type == 'private':
         if message.text == 'Создать торт':
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 1)
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
             
             meringue = types.KeyboardButton('Торт-бeзе')
             cake = types.KeyboardButton('Бисквитный торт')
@@ -56,11 +60,11 @@ def subcategory(message):
             
             markup.add(meringue, cake, waffles, cream, back)
             
-            bot.send_message(message.chat.id,'На какой основе хотите торт?',reply_markup=markup) 
+            bot.send_message(message.chat.id,'На какой основе хотите торт?', reply_markup=markup)
             
         elif message.text == 'Торт-безе': 
                 
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 1)
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
             
             choco_cream = types.KeyboardButton('Шоколадный крем')
             banana_cream = types.KeyboardButton('Банановый крем')
@@ -74,7 +78,7 @@ def subcategory(message):
             
         elif message.text == 'Вернуться в основное меню': 
                 
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 2)
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 
             catalog = types.KeyboardButton('Каталог')
             contacts = types.KeyboardButton('Контакты')
@@ -83,7 +87,7 @@ def subcategory(message):
 
             markup.add(catalog, contacts, basket, make_cake)
                 
-            bot.send_message(message.chat.id,'Вы перешли в основное меню:',reply_markup=markup) 
+            bot.send_message(message.chat.id,'Вы перешли в основное меню:', reply_markup=markup)
             
 '''            
 @bot.message_handler(content_types=['text'])
