@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+main_snail_temp.py
 
 # C extensions
 *.so
