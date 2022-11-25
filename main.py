@@ -32,6 +32,7 @@ def start_message(message):
             f"Привет, {user_login}! Самые вкусные торты тут! 🍰",
             )
         SQL_register_new_user(user_name, user_login, user_tg_id)
+    button_message(message)
 
 
 @bot.message_handler(commands=['button'])
@@ -44,7 +45,7 @@ def button_message(message):
 
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     markup.add(catalog, contacts, basket, make_cake)
-    bot.send_message(message.chat.id, '', reply_markup=markup)
+    bot.send_message(message.chat.id, 'Главное меню:', reply_markup=markup)
 
 
 @bot.message_handler(content_types='text')
@@ -71,7 +72,7 @@ def message_reply(message):
 
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
         markup.add(meringue, cake, waffles, cream, back)
-        bot.send_message(message.chat.id, 'Выбираем основу торта', reply_markup=markup)
+        bot.send_message(message.chat.id, 'Выбираем основу торта:', reply_markup=markup)
 
     if message.text == 'Шоколадный крем':
         bot.send_message(message.chat.id, 'Отличный выбор!')
