@@ -2,6 +2,7 @@ import pandas
 import pprint
 from pathlib import Path
 
+
 PRICELIST_CUSTOM = Path.cwd().joinpath('data').joinpath('prices_custom.xlsx')
 
 pp = pprint.PrettyPrinter(indent=3)
@@ -25,7 +26,9 @@ def read_excel_column(excelfile, col):
     return {category: product_price}
 
 
-def read_pricelist_custom(file_loc):
+def read_pricelist_custom():
+
+    file_loc = PRICELIST_CUSTOM
 
     price_list_custom = {}
     price_list_custom.update(read_excel_column(file_loc, "B:C"))  # Кол-во уров
@@ -45,4 +48,4 @@ def read_pricelist_custom(file_loc):
     return price_list_custom
 
 
-pp.pprint(read_pricelist_custom(PRICELIST_CUSTOM))
+# pp.pprint(read_pricelist_custom())

@@ -1,8 +1,8 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+_snail_store/
 *.py[cod]
 *$py.class
-main_snail_temp.py
 
 # C extensions
 *.so
