@@ -7,8 +7,7 @@ from sql_functions import (
     )
 
 
-TOKEN = '5811022670:AAGnEXWfmIgbYxJQ0DHH8mJXTJjtqjhhddI'  # Semen_bot
-# TOKEN = '5778281282:AAHAPOtzeP7_qofFxkkb0KxgSJzhMarWn-Y'  # Sergey_bot
+TOKEN = '5811022670:AAGnEXWfmIgbYxJQ0DHH8mJXTJjtqjhhddI'
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -26,8 +25,9 @@ def start_message(message):
     contacts = types.KeyboardButton('Контакты')
     basket = types.KeyboardButton('Корзина')
     make_cake = types.KeyboardButton('Создать торт')
+    button_phone = types.KeyboardButton(text='Отправить свой номер телефона', request_contact=True)
 
-    markup.add(catalog, contacts, basket, make_cake)
+    markup.add(catalog, contacts, basket, make_cake, button_phone)
     
     user_name = message.from_user.full_name
     user_login = message.from_user.username
@@ -38,92 +38,121 @@ def start_message(message):
         bot.send_message(
             message.chat.id,
             f"Welcome back {user['login']}!",
+            reply_markup=markup
             )
     else:       # Если пользователь новый
         bot.send_message(
             message.chat.id,
             f"Привет, {user_login}! Самые вкусные торты тут! 🍰",
+            reply_markup=markup
             )
         SQL_register_new_user(user_name, user_login, user_tg_id)
+   
     
+   
 @bot.message_handler(content_types=['text'])
 def subcategory(message):
     if message.chat.type == 'private':
         if message.text == 'Создать торт':
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 1)
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 2)
             
-            meringue = types.KeyboardButton('Торт-бeзе')
-            cake = types.KeyboardButton('Бисквитный торт')
-            waffles = types.KeyboardButton('Вафельной торт')
-            cream = types.KeyboardButton('Творожный торт')
+            layer = types.KeyboardButton('1 уровень')
+            two_layers = types.KeyboardButton('2 уровня')
+            three_layers = types.KeyboardButton('3 уровня')
             back = types.KeyboardButton('Вернуться в основное меню')
             
-            markup.add(meringue, cake, waffles, cream, back)
+            markup.add(layer, two_layers, three_layers, back)
             
-            bot.send_message(message.chat.id,'На какой основе хотите торт?',reply_markup=markup) 
+            bot.send_message(message.chat.id,'Создайте свой торт! Укажите количество уровней торта:',reply_markup=markup) 
             
-        elif message.text == 'Торт-безе': 
-                
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 1)
-            
-            choco_cream = types.KeyboardButton('Шоколадный крем')
-            banana_cream = types.KeyboardButton('Банановый крем')
-            berry_cream = types.KeyboardButton('Ягодный крем')
-            pistachio_cream = types.KeyboardButton('Фисташковый крем')
-            back = types.KeyboardButton('Вернуться в основное меню')
-            
-            markup.add(choco_cream, banana_cream, berry_cream, pistachio_cream, back)
-                
-            bot.send_message(message.chat.id,'Отличный выбор! Определимся с кремом:',reply_markup=markup)
-            
-        elif message.text == 'Вернуться в основное меню': 
+        elif message.text in layer_buttons: 
                 
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 2)
-
-            catalog = types.KeyboardButton('Каталог')
-            contacts = types.KeyboardButton('Контакты')
-            basket = types.KeyboardButton('Корзина')
-            make_cake = types.KeyboardButton('Создать торт')
-
-            markup.add(catalog, contacts, basket, make_cake)
-                
-            bot.send_message(message.chat.id,'Вы перешли в основное меню:',reply_markup=markup) 
             
-'''            
-@bot.message_handler(content_types=['text'])
-def bisquit_cake(message):
-    if message.chat.type == 'private':               
-        if message.text == 'Бисквитный торт': 
-                
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 1)
-
-            banana_cake = types.KeyboardButton('Банановый бисквит')
-            choco_cake = types.KeyboardButton('Шоколадный бисквит')
-            berry_cake = types.KeyboardButton('Ягодный бисквит')
-            cheese_cake = types.KeyboardButton('Сырный бисквит')
+            square = types.KeyboardButton('Квадратный')
+            circle = types.KeyboardButton('Круглый')
+            rectangle = types.KeyboardButton('Прямоугольный')
             back = types.KeyboardButton('Вернуться в основное меню')
             
-            markup.add(banana_cake, choco_cake, raspberry_cake, cheese_cake, back)
+            markup.add(square, circle, rectangle, back)
                 
-            bot.send_message(message.chat.id,'Выберите вид бисквита:', reply_markup=markup)
+            bot.send_message(message.chat.id,'Отлично! Теперь определимся с формой торта:',reply_markup=markup)
+            
+        elif message.text in form_buttons : 
+                
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 2)
+            
+            without_topping = types.KeyboardButton('Без топинга')
+            white_sauce = types.KeyboardButton('Белый соус')
+            caramel = types.KeyboardButton('Карамельный сироп')
+            maple = types.KeyboardButton('Клиновый сироп')
+            strawberry = types.KeyboardButton('Клубничный сироп')
+            bilberry = types.KeyboardButton('Черничный сироп')
+            milk_choco = types.KeyboardButton('Молочный шоколад')
+            back = types.KeyboardButton('Вернуться в основное меню')
+            markup.add(without_topping, white_sauce, caramel, maple, strawberry, bilberry, milk_choco, back)
+                
+            bot.send_message(message.chat.id,'Хороший выбор) Как на счет топинга?',reply_markup=markup)
+            
+            
+        elif message.text in topping_buttons : 
+            
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 2) 
+            
+            additionally = types.KeyboardButton('Дополнительно')
+            ordering = types.KeyboardButton('Оформить заказ')
+            back = types.KeyboardButton('Вернуться в основное меню')
+            
+            markup.add(additionally, ordering, back)
+            
+            bot.send_message(message.chat.id,
+                             'Торт собран:) Чтобы добавить еще компонентов в свой торт нажмите "Дополнительно", для заказа - "Оформить заказ"',
+                             reply_markup=markup)
+            
+        elif message.text == 'Дополнительно':
+            
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 2)
+            
+            barries = types.KeyboardButton('Ягоды')
+            decor = types.KeyboardButton('Декор')
+            lettering = types.KeyboardButton('Надпись')
+            back = types.KeyboardButton('Назад')
+            
+            markup.add(barries, decor, lettering, back)
+            
+            bot.send_message(message.chat.id,'Укажите дополнения:',reply_markup=markup) 
         
-        elif message.text == 'Торт-безе': 
-                
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 1)
             
-            choco_cream = types.KeyboardButton('Шоколадный крем')
-            banana_cream = types.KeyboardButton('Банановый крем')
-            berry_cream = types.KeyboardButton('Ягодный крем')
-            pistachio_cream = types.KeyboardButton('Фисташковый крем')
+        elif message.text == 'Ягоды': 
+            
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 2) 
+            
+            blackberries = types.KeyboardButton('Ежевика')
+            raspberries = types.KeyboardButton('Малина')
+            blueberries = types.KeyboardButton('Голубика')
+            strawberries = types.KeyboardButton('Клубника')
+            back = types.KeyboardButton('Назад')
+            
+            markup.add(blackberries, raspberries, blueberries, strawberries, back)
+            
+            bot.send_message(message.chat.id,'Добавь ягод:', reply_markup=markup)
+        
+        
+        
+        
+        elif message.text == 'Назад':
+            
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 2) 
+            
+            additionally = types.KeyboardButton('Дополнительно')
+            ordering = types.KeyboardButton('Оформить заказ')
             back = types.KeyboardButton('Вернуться в основное меню')
             
-            markup.add(choco_cream, banana_cream, berry_cream, pistachio_cream, back)
-                
-            bot.send_message(message.chat.id,'Отличный выбор! Определимся с кремом:',reply_markup=markup)     
-                
-
-                    
-        elif message.text == 'Вернуться в основное меню': 
+            markup.add(additionally, ordering, back)
+            
+            bot.send_message(message.chat.id,'Основа торта готова:) Чтобы добавить еще компонентов в свой торт нажмите "Дополнительно" ',reply_markup=markup)
+            
+        if message.text == 'Вернуться в основное меню': 
                 
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 2)
 
@@ -135,8 +164,21 @@ def bisquit_cake(message):
             markup.add(catalog, contacts, basket, make_cake)
                 
             bot.send_message(message.chat.id,'Вы перешли в основное меню:',reply_markup=markup) 
+
+
+  
+    
+       
             
-        else:
-            bot.send_message(message.chat.id,'Я вас не понимаю')
-'''            
+'''
+elif message.text == 'Оформить заказ':
+    
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width = 2)
+    
+    
+    markup.add( )
+    
+    bot.send_message(message.chat.id,'Укажите ваши данные:',reply_markup=markup) 
+'''    
+         
 bot.polling(none_stop=True)
