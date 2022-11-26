@@ -7,8 +7,8 @@ from sql_functions import (
     )
 
 
-# TOKEN = '5811022670:AAGnEXWfmIgbYxJQ0DHH8mJXTJjtqjhhddI'
-TOKEN = '5448215776:AAHn8DlLdHMiebKuB0pKIaPfdWV980UmvxQ'
+TOKEN = '5811022670:AAGnEXWfmIgbYxJQ0DHH8mJXTJjtqjhhddI'
+
 bot = telebot.TeleBot(TOKEN)
 
 
@@ -18,15 +18,15 @@ topping_buttons = ['Без топинга', 'Белый соус','Караме�
 berries_button = ['Ежевика', 'Малина', 'Голубика', 'Клубника']
 
 
-# '''кнопка отправить контакты должна быть размещена в начале, Семен нужно добавить
-# # к твоим условим в функции --> если пользователь не отправил контакты по этой кнопке,
-# то не идет дальше в меню для заказа. В твои функции не лезу.'''
-# @bot.message_handler(commands=['number'])
-# def phone(message):
-#     keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-#     button_phone = types.KeyboardButton(text="Отправить свой номер телефона для уточнения заказа", request_contact=True)
-#     keyboard.add(button_phone)
-#     bot.send_message(message.chat.id, 'Номер телефона', reply_markup=keyboard)
+'''кнопка отправить контакты должна быть размещена в начале, Семен нужно добавить
+# к твоим условим в функции --> если пользователь не отправил контакты по этой кнопке,
+то не идет дальше в меню для заказа. В твои функции не лезу.'''
+@bot.message_handler(commands=['number'])
+def phone(message):
+    keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    button_phone = types.KeyboardButton(text="Отправить свой номер телефона для уточнения заказа", request_contact=True)
+    keyboard.add(button_phone)
+    bot.send_message(message.chat.id, 'Номер телефона', reply_markup=keyboard)
 
 
 @bot.message_handler(commands=['start'])
