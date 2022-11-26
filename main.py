@@ -30,6 +30,11 @@ def phone(message):
     keyboard.add(button_phone)
     bot.send_message(message.chat.id, 'Номер телефона', reply_markup=keyboard)
 
+'''для базы данных 
+SQL_register_new_user(user_name, user_login, user_tg_id)'''
+user_phone_number = message.from_user.phone_number
+
+
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
