@@ -48,4 +48,25 @@ def read_pricelist_custom():
     return price_list_custom
 
 
+def add_order_to_busket(busket, recipe, price):
+    busket.update({
+        len(busket) + 1: {
+            'recipe': recipe,
+            'price': price
+            }
+        })
+    return busket
+
+
+def delete_from_busket(busket, id):
+    busket.pop(id)
+    new_busket = {}
+    num = 1
+    for item in busket:
+        new_busket.update({num: busket[item]})
+        num += 1
+
+    return new_busket
+
+
 # pp.pprint(read_pricelist_custom())
