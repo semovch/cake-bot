@@ -182,4 +182,3 @@ elif message.text == 'Оформить заказ':
 '''    
          
 bot.polling(none_stop=True)
-

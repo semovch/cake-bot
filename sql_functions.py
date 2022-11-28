@@ -117,4 +117,4 @@ delivery_time = datetime.time(18, 00)
 comment = 'Код в подъезде 312'
 
 # SQL_register_new_order(user_id, recipe, price, address, delivery_date, delivery_time, comment)
-pp.pprint(SQL_get_order_by_id(3))
+# pp.pprint(SQL_get_order_by_id(3))
