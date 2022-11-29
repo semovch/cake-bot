@@ -21,6 +21,15 @@ def SQL_register_new_user(name, login, tg_id):
     conn.close()
 
 
+def SQL_put_user_phone(tg_id, phone):
+    conn = sqlite3.connect(BASE)
+    cur = conn.cursor()
+    exec_text = f"UPDATE 'users' SET contact={phone} WHERE tg_id={tg_id} "
+    cur.execute(exec_text)
+    conn.commit()
+    conn.close()
+
+
 def SQL_get_user_data(tg_id):
 
     conn = sqlite3.connect(BASE)
