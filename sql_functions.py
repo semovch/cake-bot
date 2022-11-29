@@ -43,7 +43,7 @@ def SQL_get_user_data(tg_id):
     return formated_result
 
 
-def SQL_register_new_order(user_id,
+def SQL_register_new_order(user_id,  # TG_id
                            recipe,
                            price,
                            address,
@@ -96,25 +96,51 @@ def SQL_get_order_by_id(order_id):
     return formated_result
 
 
-# =================================================
-# =================  For Testing  =================
-# =================================================
+def SQL_get_orders_by_user(tg_id):     # Получение истории заказов покупателя
+    conn = sqlite3.connect(BASE)
+    cur = conn.cursor()
+    exec_text = f"SELECT * FROM 'orders' WHERE user_id is '{tg_id}'"
+    cur.execute(exec_text)
+    result = cur.fetchall()
+    conn.close()
 
-user_id = 898397711
-recipe_dict = {
-    'Количество уровней': '2 уровня',
-    'Форма': 'Круг',
-    'Топпинг': ['Белый соус', 'Молочный шоколад'],
-    'Ягоды': ['Клубника'],
-    'Декор': ['Марципан', 'Маршмеллоу'],
-    'Надпись': False
-    }
-recipe = json.dumps(recipe_dict)
-price = 2530
-address = 'Nizhniy Novgorod, Lubyanskaya str, 3-11'
-delivery_date = datetime.datetime(2022, 12, 31)
-delivery_time = datetime.time(18, 00)
-comment = 'Код в подъезде 312'
+    if len(result) < 1:
+        return False
 
-# SQL_register_new_order(user_id, recipe, price, address, delivery_date, delivery_time, comment)
-# pp.pprint(SQL_get_order_by_id(3))
+    formated_result = {}
+    for item in result:
+
+        formated_result.update({
+            item[0]: {
+                'id': item[0],
+                'user_id': item[1],
+                'recipe': json.loads(item[2]),
+                'price': item[3],
+                'address': item[4],
+                'comment': item[5],
+                'delivery_date': item[6],
+                'delivery_time': item[7],
+                'order_time': item[8],
+                'current_status': item[9]
+                }
+            })
+    return formated_result
+
+
+def SQL_get_addreses(tg_id):
+    '''
+    Сбор информации о предыдущих заказах пользователя
+    Формирование списка всех прошлых адресов доставки
+    all_addreses[0] - последний адрес
+    Если заказов небыло, то: all_addreses= False
+    '''
+    all_addreses = []
+    old_orders = SQL_get_orders_by_user(tg_id)
+    if old_orders:
+        old_addreses = [old_orders[item]['address'] for item in reversed(old_orders)]
+        for item in old_addreses:
+            if item not in all_addreses:
+                all_addreses.append(item)
+    else:
+        all_addreses = False
+    return all_addreses
