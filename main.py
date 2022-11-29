@@ -59,7 +59,6 @@ def read_contact_phone(message):
 @bot.message_handler(content_types=['text'])
 def subcategory(message):
     if message.chat.type == 'private':
-        print(message.text)
         if message.text == 'Создать торт':
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 
